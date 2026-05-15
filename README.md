@@ -42,3 +42,25 @@ sudo gluster peer probe VM2_IP
 sudo gluster peer status
 ```
 Reminder: The status MUST say Peer in Cluster (Connected). If it says disconnected, run sudo ufw disable on both VMs to stop your firewall from blocking GlusterFS ports.
+5. Create and Start the Replicated Volume (Run ONLY on VM1)
+```bash
+# Create the volume using the brick sub-folders
+sudo gluster volume create myvol replica 2 VM1_IP:/mnt/sdb_storage/gluster_brick VM2_IP:/mnt/sdb_storage/gluster_brick force
+
+# Start the volume
+sudo gluster volume start myvol
+
+# For verification checking:
+sudo gluster volume info myvol
+```
+6. Mount the GlusterFS Volume (Run on BOTH VMs)
+This connects your local /mnt/myvol folder to the smart network layer.
+- On VM1:
+  ```bash
+  sudo mount -t glusterfs localhost:/myvol /mnt/myvol
+  ```
+- On VM2:
+  ```bash
+  sudo mount -t glusterfs VM1_IP:/myvol /mnt/myvol
+  ```
+
