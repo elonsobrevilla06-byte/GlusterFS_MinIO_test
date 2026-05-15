@@ -10,4 +10,10 @@ VM1_IP / VM2_IP: The actual internal IP addresses of your machines (e.g., 192.16
 
 /mnt/myvol: The smart network gateway where files are read and written (The GlusterFS Mount Point).
 
-
+🛠️ PART 1: CONFIGURING GLUSTERFS
+1. Install GlusterFS Server (Run on BOTH VMs)
+```bash
+sudo apt update
+sudo apt install -y software-properties-common
+sudo apt install -y glusterfs-server
+```
