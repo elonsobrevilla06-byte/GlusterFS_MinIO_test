@@ -66,3 +66,32 @@ This connects your local /mnt/myvol folder to the smart network layer.
 
 # 🧪 PART 2: THE CRITICAL CLUSTER TESTING STEPS
 Before proceeding to MinIO, run these tests to verify your storage backend is completely resilient.
+
+Test A: Normal Replication
+1. On VM1, create a file:
+```bash
+echo "Normal sync test: Working flawlessly!" | sudo tee /mnt/myvol/normal-test.txt
+```
+2.) On VM2, verify the file arrived automatically:
+```bash
+cat /mnt/myvol/normal-test.txt
+```
+
+Test B: Failover & Self-Healing
+1.) On VM2, simulate a severe crash by turning off the cluster daemon and dropping the mount:
+```bash
+sudo systemctl stop glusterd && sudo umount -f /mnt/myvol
+```
+2.) On VM1, write data while VM2 is offline (it should execute smoothly without freezing):
+```bash
+echo "Test" | sudo tee /mnt/myvol/fail-test.txt
+```
+3.) On VM2, bring the server back online and remount:
+```bash
+sudo systemctl start glusterd && sudo mount -t glusterfs VM1_IP:/myvol /mnt/myvol
+```
+4.) On VM2, wait 5–10 seconds and read the file to confirm automatic self-healing worked:
+```bash
+cat /mnt/myvol/fail-test.txt
+```
+
