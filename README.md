@@ -95,3 +95,49 @@ sudo systemctl start glusterd && sudo mount -t glusterfs VM1_IP:/myvol /mnt/myvo
 cat /mnt/myvol/fail-test.txt
 ```
 
+# PART 3: CONFIGURING MINIO
+Reminder: Execute all MinIO binary installations and setup steps ONLY on VM1. Because it sits inside /mnt/myvol, the configuration files will mirror onto VM2 anyway!
+
+1. Download and Install MinIO (Run ONLY on VM1)
+```bash
+wget https://dl.min.io/server/minio/release/linux-amd64/minio
+chmod +x minio
+sudo mv minio /usr/local/bin/
+```
+2. Create MinIO Folders inside the GlusterFS Mount (Run ONLY on VM1)
+```bash
+mkdir -p /mnt/myvol/minio
+sudo chown -R $USER:$USER /mnt/myvol/minio
+```
+3. Start the MinIO Server Object Storage (Run ONLY on VM1)
+```bash
+export MINIO_ROOT_USER=admin
+export MINIO_ROOT_PASSWORD=admin123
+minio server /mnt/myvol/minio --console-address ":9001"
+```
+
+💻 PART 4: WEB APPLICATION VERIFICATION
+1. Open your web browser and go to: http://VM1_IP:9001 (e.g., [http://192.168.56.101:9001](http://192.168.56.101:9001)).
+
+2. Log in using your root credentials:
+
+Username: admin
+
+Password: admin123
+
+3. Click on Buckets ➔ Create Bucket and give it a name (for example: my-bucket).
+
+4. Upload any file (like an image or a test document) directly into your new bucket using the web browser UI interface.
+
+The Ultimate Integration Check:
+Once the file uploads via your web browser, drop into your server command lines to confirm GlusterFS replicated the data across both machines.
+
+- On VM1:
+```bash
+ls -R /mnt/myvol/minio
+```
+
+- On VM2:
+```bash
+ls -R /mnt/myvol/minio
+```
