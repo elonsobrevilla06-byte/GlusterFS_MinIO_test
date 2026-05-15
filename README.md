@@ -10,7 +10,7 @@ VM1 / VM2: Virtual Machine 1 and Virtual Machine 2
 
 - /mnt/myvol: The smart network gateway where files are read and written (The GlusterFS Mount Point).
 
-🛠️ PART 1: CONFIGURING GLUSTERFS
+# 🛠️ PART 1: CONFIGURING GLUSTERFS
 1. Install GlusterFS Server (Run on BOTH VMs)
 ```bash
 sudo apt update
@@ -64,3 +64,5 @@ This connects your local /mnt/myvol folder to the smart network layer.
   sudo mount -t glusterfs VM1_IP:/myvol /mnt/myvol
   ```
 
+# 🧪 PART 2: THE CRITICAL CLUSTER TESTING STEPS
+Before proceeding to MinIO, run these tests to verify your storage backend is completely resilient.
