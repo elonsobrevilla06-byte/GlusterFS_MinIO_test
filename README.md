@@ -1,7 +1,7 @@
 # GlusterFS && MinIO
 A highly available and distributed storage system using GlusterFS for two-way active replication over dedicated sdb drives, integrated with MinIO Object Storage on Ubuntu. Built for seamless data synchronization, automatic self-healing, and failover resilience.
 
-# 📌 Quick Terminology Guide
+📌 Quick Terminology Guide
 VM1 / VM2: Virtual Machine 1 and Virtual Machine 2
 
 VM1_IP / VM2_IP: The actual internal IP addresses of your machines (e.g., 192.168.56.101)
