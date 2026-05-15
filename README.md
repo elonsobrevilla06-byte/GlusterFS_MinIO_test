@@ -17,3 +17,28 @@ sudo apt update
 sudo apt install -y software-properties-common
 sudo apt install -y glusterfs-server
 ```
+2. Enable and Start the Service (Run on BOTH VMs)
+```bash
+sudo systemctl enable --now glusterd
+
+# For verification checking:
+sudo systemctl status glusterd
+```
+3. Prepare the Storage Folders (Run on BOTH VMs)
+Make sure your dedicated sdb drive is mounted to /mnt/sdb_storage before running these.
+```bash
+# Create the backend storage sub-folder (avoids mount point error)
+sudo mkdir -p /mnt/sdb_storage/gluster_brick
+
+# Create the frontend shared mount folder
+sudo mkdir -p /mnt/myvol
+```
+4. Connect the Virtual Machines Together (Run ONLY on VM1)
+Introduce the two servers to build the trusted storage pool.
+```bash
+sudo gluster peer probe VM2_IP
+
+# For verification checking:
+sudo gluster peer status
+```
+Reminder: The status MUST say Peer in Cluster (Connected). If it says disconnected, run sudo ufw disable on both VMs to stop your firewall from blocking GlusterFS ports.
